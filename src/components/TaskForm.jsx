@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { addTask, updateTask } from "./taskService";
+import { toast } from "react-toastify";
 
 const TaskForm = ({ isOpen, setIsOpen, taskData, setRefresh }) => {
   const [FormData, setFormData] = useState({
@@ -23,6 +24,12 @@ const TaskForm = ({ isOpen, setIsOpen, taskData, setRefresh }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if(!FormData.title || !FormData.description || !FormData.status){
+      toast.error("Please fill all fields");
+      return;
+    }
+
     if (taskData) {
       await updateTask(taskData.id, {
         title: FormData.title,
@@ -37,8 +44,9 @@ const TaskForm = ({ isOpen, setIsOpen, taskData, setRefresh }) => {
       });
     }
     setFormData({ title: "", description: "", status: "" }); // Reset form
-    setIsOpen(false); // Close the modal after submission
-    setRefresh((prev) => !prev); // Trigger refresh in TaskList
+    setIsOpen(false); // Close form
+    toast.success(`Task ${taskData ? "updated" : "added"} successfully!`);
+    setRefresh((prev) => !prev); // refresh in TaskList
   };
   return (
     <>
@@ -84,7 +92,7 @@ const TaskForm = ({ isOpen, setIsOpen, taskData, setRefresh }) => {
                 type="submit"
                 className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 cursor-pointer"
               >
-                Add Task
+                Save
               </button>
               <button
                 type="button"

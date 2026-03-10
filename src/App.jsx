@@ -4,6 +4,7 @@ import Header from "./components/Header";
 import Filter from "./components/Filter";
 import TaskList from "./components/TaskList";
 import TaskForm from "./components/TaskForm";
+import { ToastContainer } from "react-toastify";
 
 const App = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,6 +14,7 @@ const App = () => {
   const [search, setSearch] = useState("");
   return (
     <>
+      <ToastContainer />
       <Header setSearch={setSearch} />
       <Filter  setIsOpen={setIsOpen} setEdit={setEdit} setFilter={setFilter} />
       <TaskList setEdit={setEdit} setIsOpen={setIsOpen} refresh={refresh} filter={filter} search={search} />
