@@ -1,13 +1,22 @@
-import { collection,addDoc, getDocs, doc, updateDoc, deleteDoc } from "firebase/firestore"
+import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where } from "firebase/firestore"
 import db from "../firebase";
 
 export const addTask = async (task) => {
-  try{
-    await addDoc(collection(db, "tasks"), task)
-  }catch(error){
+  try {
+    // prevent duplicate titles at the service level
+    const q = query(collection(db, "tasks"), where("title", "==", task.title));
+    const snapshot = await getDocs(q);
+    if (!snapshot.empty) {
+      // throw so callers know it failed
+      throw new Error("Task with this title already exists");
+    }
+    await addDoc(collection(db, "tasks"), task);
+  } catch (error) {
     console.error("Error adding task: ", error);
+    // propagate error so UI can react if needed
+    throw error;
   }
-}
+};
 
 export const getTasks = async () => {
   const querySnapshot = await getDocs(collection(db, "tasks"));

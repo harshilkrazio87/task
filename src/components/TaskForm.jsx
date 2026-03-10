@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { addTask, updateTask } from "./taskService";
+import { addTask, updateTask, getTasks } from "./taskService";
 import { toast } from "react-toastify";
 
 const TaskForm = ({ isOpen, setIsOpen, taskData, setRefresh }) => {
@@ -25,27 +25,43 @@ const TaskForm = ({ isOpen, setIsOpen, taskData, setRefresh }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if(!FormData.title || !FormData.description || !FormData.status){
+    if (!FormData.title || !FormData.description || !FormData.status) {
       toast.error("Please fill all fields");
       return;
     }
 
-    if (taskData) {
-      await updateTask(taskData.id, {
-        title: FormData.title,
-        description: FormData.description,
-        status: FormData.status,
-      });
-    } else {
-      await addTask({
-        title: FormData.title,
-        description: FormData.description,
-        status: FormData.status,
-      });
+    // check existing task 
+    const allTasks = await getTasks();
+    
+    const titleMatch = (t) =>
+      t.title.trim().toLowerCase() === FormData.title.trim().toLowerCase() && t.description.trim().toLowerCase() === FormData.description .trim().toLowerCase();
+
+    try {
+      if (taskData) {
+        await updateTask(taskData.id, {
+          title: FormData.title,
+          description: FormData.description,
+          status: FormData.status,
+        });
+      } else {
+        if (allTasks.some(titleMatch)) {
+          toast.error("already exists");
+          return;
+        }
+
+        await addTask({
+          title: FormData.title,
+          description: FormData.description,
+          status: FormData.status,
+        });
+      }
+    } catch (error) {
+      toast.error(error.message || "Unable to save task");
+      return;
     }
+    toast.success(`Task ${taskData ? "updated" : "added"} successfully!`);
     setFormData({ title: "", description: "", status: "" }); // Reset form
     setIsOpen(false); // Close form
-    toast.success(`Task ${taskData ? "updated" : "added"} successfully!`);
     setRefresh((prev) => !prev); // refresh in TaskList
   };
   return (
