@@ -5,6 +5,7 @@ import TaskItem from "./TaskItem";
 const TaskList = ({ setEdit, setIsOpen, refresh, filter, search }) => {
   const [tasks, setTasks] = useState([]);
 
+  // fetch tasks from firebase
   const fetchTask = async () => {
     const data = await getTasks();
     setTasks(data);
@@ -15,6 +16,7 @@ const TaskList = ({ setEdit, setIsOpen, refresh, filter, search }) => {
     fetchTask();
   }, [refresh]);
 
+  // filter tasks by status and search
   const filterTasks = tasks
     .filter((task) => {
       return filter === "All" ? true : task.status === filter;
@@ -22,7 +24,6 @@ const TaskList = ({ setEdit, setIsOpen, refresh, filter, search }) => {
     .filter((task) => {
       return task.title.toLowerCase().includes(search.toLowerCase());
     });
-  console.log(filterTasks);
 
   return (
     <>

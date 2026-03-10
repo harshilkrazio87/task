@@ -34,7 +34,7 @@ const TaskForm = ({ isOpen, setIsOpen, taskData, setRefresh }) => {
     const allTasks = await getTasks();
     
     const titleMatch = (t) =>
-      t.title.trim().toLowerCase() === FormData.title.trim().toLowerCase() && t.description.trim().toLowerCase() === FormData.description .trim().toLowerCase();
+      t.title.trim().toLowerCase() === FormData.title.trim().toLowerCase() && t.description.trim().toLowerCase() === FormData.description.trim().toLowerCase();
 
     try {
       if (taskData) {
@@ -46,9 +46,10 @@ const TaskForm = ({ isOpen, setIsOpen, taskData, setRefresh }) => {
       } else {
         if (allTasks.some(titleMatch)) {
           toast.error("already exists");
+          setFormData({title: "", description: "", status: ""});
+          setIsOpen(false);
           return;
         }
-
         await addTask({
           title: FormData.title,
           description: FormData.description,
@@ -59,9 +60,9 @@ const TaskForm = ({ isOpen, setIsOpen, taskData, setRefresh }) => {
       toast.error(error.message || "Unable to save task");
       return;
     }
-    toast.success(`Task ${taskData ? "updated" : "added"} successfully!`);
     setFormData({ title: "", description: "", status: "" }); // Reset form
     setIsOpen(false); // Close form
+    toast.success(`Task ${taskData ? "updated" : "added"} successfully!`);
     setRefresh((prev) => !prev); // refresh in TaskList
   };
   return (
