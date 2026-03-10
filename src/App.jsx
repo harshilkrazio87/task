@@ -10,11 +10,12 @@ const App = () => {
   const [edit,setEdit] = useState(null);
   const [refresh, setRefresh] = useState(false);
   const [filter, setFilter] = useState("All");
+  const [search, setSearch] = useState("");
   return (
     <>
-      <Header />
+      <Header setSearch={setSearch} />
       <Filter  setIsOpen={setIsOpen} setEdit={setEdit} setFilter={setFilter} />
-      <TaskList setEdit={setEdit} setIsOpen={setIsOpen} refresh={refresh} filter={filter} />
+      <TaskList setEdit={setEdit} setIsOpen={setIsOpen} refresh={refresh} filter={filter} search={search} />
       <TaskForm isOpen={isOpen} setIsOpen={setIsOpen} taskData={edit} setRefresh={setRefresh} />
     </>
   );

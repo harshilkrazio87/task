@@ -36,7 +36,7 @@ const TaskForm = ({ isOpen, setIsOpen, taskData, setRefresh }) => {
         status: FormData.status,
       });
     }
-    console.log(FormData);
+    setFormData({ title: "", description: "", status: "" }); // Reset form
     setIsOpen(false); // Close the modal after submission
     setRefresh((prev) => !prev); // Trigger refresh in TaskList
   };
