@@ -30,11 +30,13 @@ const TaskForm = ({ isOpen, setIsOpen, taskData, setRefresh }) => {
       return;
     }
 
-    // check existing task 
+    // check existing task
     const allTasks = await getTasks();
-    
+
     const titleMatch = (t) =>
-      t.title.trim().toLowerCase() === FormData.title.trim().toLowerCase() && t.description.trim().toLowerCase() === FormData.description.trim().toLowerCase();
+      t.title.trim().toLowerCase() === FormData.title.trim().toLowerCase() &&
+      t.description.trim().toLowerCase() ===
+        FormData.description.trim().toLowerCase();
 
     try {
       if (taskData) {
@@ -46,7 +48,7 @@ const TaskForm = ({ isOpen, setIsOpen, taskData, setRefresh }) => {
       } else {
         if (allTasks.some(titleMatch)) {
           toast.error("already exists");
-          setFormData({title: "", description: "", status: ""});
+          setFormData({ title: "", description: "", status: "" });
           setIsOpen(false);
           return;
         }
@@ -67,9 +69,11 @@ const TaskForm = ({ isOpen, setIsOpen, taskData, setRefresh }) => {
   };
   return (
     <>
-      <div className="fixed inset-0 bg-black/40 flex items-center justify-center">
-        <div className="bg-white w-150 rounded-lg p-6 shadow-lg">
-          <h2 className="text-lg font-semibold mb-4">Add New Task</h2>
+      <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+        <div className="bg-white w-full max-w-sm sm:max-w-md rounded-lg p-4 sm:p-6 shadow-lg">
+          <h2 className="text-xl font-semibold mb-4 text-center">
+            {taskData ? "Edit Task" : "Add New Task"}
+          </h2>
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <input
               type="text"
@@ -79,7 +83,7 @@ const TaskForm = ({ isOpen, setIsOpen, taskData, setRefresh }) => {
               onChange={(e) =>
                 setFormData({ ...FormData, title: e.target.value })
               }
-              className="border px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="border px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
             <textarea
               placeholder="Description"
@@ -88,7 +92,7 @@ const TaskForm = ({ isOpen, setIsOpen, taskData, setRefresh }) => {
               onChange={(e) =>
                 setFormData({ ...FormData, description: e.target.value })
               }
-              className="border px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="border px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
             <select
               name="status"
@@ -96,7 +100,7 @@ const TaskForm = ({ isOpen, setIsOpen, taskData, setRefresh }) => {
               onChange={(e) =>
                 setFormData({ ...FormData, status: e.target.value })
               }
-              className="border px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="border px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
             >
               <option value="">Select Status</option>
               <option value="To Do">To Do</option>
@@ -107,7 +111,7 @@ const TaskForm = ({ isOpen, setIsOpen, taskData, setRefresh }) => {
             <div className="flex justify-end gap-3 mt-2">
               <button
                 type="submit"
-                className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 cursor-pointer"
+                className="bg-indigo-500 text-white px-4 py-2 rounded-lg hover:bg-indigo-600 cursor-pointer transition"
               >
                 Save
               </button>

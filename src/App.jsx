@@ -1,24 +1,21 @@
-import React, { useState } from "react";
+import React from "react";
 import "./App.css";
-import Header from "./components/Header";
-import Filter from "./components/Filter";
-import TaskList from "./components/TaskList";
-import TaskForm from "./components/TaskForm";
+import { Route, Routes } from "react-router-dom";
+import Login from "./components/Login";
+import Register from "./components/Register";
+import Home from "./Page/Home";
 import { ToastContainer } from "react-toastify";
 
 const App = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [edit,setEdit] = useState(null);
-  const [refresh, setRefresh] = useState(false);
-  const [filter, setFilter] = useState("All");
-  const [search, setSearch] = useState("");
+
   return (
     <>
       <ToastContainer />
-      <Header setSearch={setSearch} />
-      <Filter  setIsOpen={setIsOpen} setEdit={setEdit} setFilter={setFilter} />
-      <TaskList setEdit={setEdit} setIsOpen={setIsOpen} refresh={refresh} filter={filter} search={search} />
-      <TaskForm isOpen={isOpen} setIsOpen={setIsOpen} taskData={edit} setRefresh={setRefresh} />
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/home" element={<Home />} />
+      </Routes>
     </>
   );
 };
